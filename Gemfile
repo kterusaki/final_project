@@ -36,6 +36,9 @@ gem 'simple_form'
 gem 'devise'
 gem 'omniauth'
 gem 'omniauth-twitter'
+gem 'twitter'
+gem 'tweetstream'
+gem 'youtube_it'
 
 # debugging/testing tools
 group :development do
