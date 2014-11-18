@@ -1,0 +1,5 @@
+<h1>Play songs</h1>
+
+<% @tweets.each do |tweet| %>
+	<iframe width="560" height="345" src="<%= tweet.youtube_url %>?autoplay=1" frameborder="0" allowfullscreen></iframe>
+<% end %>

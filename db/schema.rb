@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141112010234) do
+ActiveRecord::Schema.define(version: 20141118033525) do
 
   create_table "identities", force: true do |t|
     t.integer  "user_id"
@@ -23,11 +23,19 @@ ActiveRecord::Schema.define(version: 20141112010234) do
 
   add_index "identities", ["user_id"], name: "index_identities_on_user_id"
 
+  create_table "play_queues", force: true do |t|
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "tweets", force: true do |t|
     t.string   "from_user"
     t.string   "text"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.boolean  "played"
+    t.string   "twitter_id"
+    t.string   "youtube_url"
   end
 
   create_table "users", force: true do |t|

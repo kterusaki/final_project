@@ -80,11 +80,14 @@ GEM
       simple_oauth (~> 0.2)
     equalizer (0.0.9)
     erubis (2.7.0)
+    ethon (0.7.1)
+      ffi (>= 1.3.0)
     eventmachine (1.0.3)
     excon (0.41.0)
     execjs (2.2.2)
     faraday (0.9.0)
       multipart-post (>= 1.2, < 3)
+    ffi (1.9.3)
     hashie (3.3.1)
     hike (1.2.3)
     http (0.6.2)
@@ -137,6 +140,8 @@ GEM
     pry-byebug (2.0.0)
       byebug (~> 3.4)
       pry (~> 0.10)
+    pry-rails (0.3.2)
+      pry (>= 0.9.10)
     rack (1.5.2)
     rack-test (0.6.2)
       rack (>= 1.0)
@@ -209,6 +214,8 @@ GEM
       memoizable (~> 0.4.0)
       naught (~> 1.0)
       simple_oauth (~> 0.3.0)
+    typhoeus (0.6.9)
+      ethon (>= 0.7.1)
     tzinfo (1.2.2)
       thread_safe (~> 0.1)
     uglifier (2.5.3)
@@ -238,10 +245,12 @@ DEPENDENCIES
   devise
   jbuilder (~> 2.0)
   jquery-rails
+  json
   omniauth
   omniauth-twitter
   pry
   pry-byebug
+  pry-rails
   rails (= 4.1.6)
   sass-rails (~> 4.0.3)
   sdoc (~> 0.4.0)
@@ -252,5 +261,6 @@ DEPENDENCIES
   turbolinks
   tweetstream
   twitter
+  typhoeus
   uglifier (>= 1.3.0)
   youtube_it

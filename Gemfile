@@ -39,10 +39,13 @@ gem 'omniauth-twitter'
 gem 'twitter'
 gem 'tweetstream'
 gem 'youtube_it'
+gem 'typhoeus'
+gem 'json'
 
 # debugging/testing tools
 group :development do
 	gem 'pry'
+	gem 'pry-rails'
 	gem 'pry-byebug'
 	gem 'better_errors'
 	gem 'binding_of_caller'

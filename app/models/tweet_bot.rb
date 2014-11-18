@@ -1,7 +1,7 @@
 require 'time'
 
 class TweetBot
-	attr_accessor :client, :play_queue, :news_feed
+	attr_accessor :client, :youtubeClient
 
 	def initialize
 		TweetStream.configure do |config|
@@ -17,10 +17,14 @@ class TweetBot
 			config.auth_method = :oauth
 		end
 
-		# Initialize client and play queue
+		# Initialize client
 		@client = TweetStream::Client.new
-		@play_queue = []
-		@news_feed = []
+
+		@client.on_error do |message|
+			puts message
+		end
+
+		@youtubeClient = Youtube.new
 	end
 
 	def start_stream
@@ -32,14 +36,14 @@ class TweetBot
 		puts 'in getTweets'
 		@client.on_timeline_status do |tweet|
 			puts 'getTweets: ' + tweet.text
-			@news_feed.push(tweet)
 
+			binding.pry
 			popPlayQueue(tweet)
 		end
 	end
 
-	# Validates that the tweet's text is a youtube url
-	def isYoutubeURL(tweet)
+	# Validates that the tweet's text is a requested song
+	def valid_tweet(tweet)
 		@url = tweet.text
 
 		if @url.include? "#radio"
@@ -53,24 +57,36 @@ class TweetBot
 	def popPlayQueue(tweet)
 		#binding.pry
 		# Add url to play queue if the tweet is a youtube/watch url
-		if isYoutubeURL(tweet)
-			@play_queue.push(tweet)
+		if valid_tweet(tweet)
+			shortUrl = grab_url(tweet)
+			
+			puts shortUrl
+			youtubeUrl = @youtubeClient.unshorten_url(shortUrl)
+			
+			if @youtubeClient.valid_song(youtubeUrl)
+				embed_url = @youtubeClient.get_embedded(youtubeUrl)
+				insertTweet(tweet.user.id, tweet.text, embed_url)
+			end
 		end
+	end
 
-		#puts @play_queue
+	# Returns the url in the tweet text, if it exists
+	def grab_url(tweet)
+		# only grabs the url from the tweet text and replaces any https with http
+		tweet.text.split(' ').find { |hunk| hunk =~ /\Ahttps{0,1}:\/\/t.co/ }.gsub('https', 'http')
 	end
 
 	# Adds Tweet to database
-	def insertTweet(tweet)
-		@tweet = Tweet.create(tweet_params)
-	end
+	# TODO: Add the user's twitter handle to twitter schema and add below
+	def insertTweet(userId, text, youtubeUrl)
+		newTweet = Tweet.new
+		newTweet.text = text
+		newTweet.youtube_url = youtubeUrl
+		newTweet.twitter_id = userId
+		newTweet.played = false
 
-	# Empties the play queue
-	def emptyPlayQueue()
-		@play_queue = []
+		newTweet.save
 	end
-
-	# TODO: Create a method that creates an instance of the Tweet model and stores all of the information in the database
 
 	def self.test_stream
 		@bot = TweetBot.new
@@ -78,10 +94,11 @@ class TweetBot
 		@bot.start_stream
 	end
 
-	def private
+	private
 		def tweet_params
 			params.require(:tweet).permit(:text)
 		end
+
 end
 
 
