@@ -37,7 +37,7 @@ class TweetBot
 		@client.on_timeline_status do |tweet|
 			puts 'getTweets: ' + tweet.text
 
-			binding.pry
+			#binding.pry
 			popPlayQueue(tweet)
 		end
 	end
@@ -65,7 +65,11 @@ class TweetBot
 			
 			if @youtubeClient.valid_song(youtubeUrl)
 				embed_url = @youtubeClient.get_embedded(youtubeUrl)
-				insertTweet(tweet.user.id, tweet.text, embed_url)
+				video = @youtubeClient.get_video(youtubeUrl)
+
+				if check_user(tweet.user.id)
+					insertTweet(tweet.user.id, tweet.text, embed_url, video.unique_id, video.title, tweet.user.name)
+				end
 			end
 		end
 	end
@@ -77,15 +81,28 @@ class TweetBot
 	end
 
 	# Adds Tweet to database
-	# TODO: Add the user's twitter handle to twitter schema and add below
-	def insertTweet(userId, text, youtubeUrl)
+	def insertTweet(userId, text, youtubeUrl, video_id, vid_title, twitter_handle)
+		# Since we're finding based on a foreign key, we can assume the search will only return one identity
+		twitter_user = Identity.where(uid: userId).take!
 		newTweet = Tweet.new
 		newTweet.text = text
 		newTweet.youtube_url = youtubeUrl
+		newTweet.video_id = video_id
 		newTweet.twitter_id = userId
 		newTweet.played = false
+		newTweet.identity_id = twitter_user.id
+		newTweet.from_user = twitter_handle
+		newTweet.vid_title = vid_title
 
 		newTweet.save
+	end
+
+	def check_user(twitter_id)
+		if Identity.where(uid: twitter_id)
+			return true
+		else
+			return false
+		end
 	end
 
 	def self.test_stream

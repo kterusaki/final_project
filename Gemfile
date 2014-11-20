@@ -40,6 +40,7 @@ gem 'twitter'
 gem 'tweetstream'
 gem 'youtube_it'
 gem 'typhoeus'
+gem 'faraday'
 gem 'json'
 
 # debugging/testing tools

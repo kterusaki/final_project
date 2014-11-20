@@ -1,0 +1,3 @@
+class IdentitiesController < ApplicationController
+	
+end

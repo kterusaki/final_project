@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141118033525) do
+ActiveRecord::Schema.define(version: 20141120011157) do
 
   create_table "identities", force: true do |t|
     t.integer  "user_id"
@@ -36,7 +36,12 @@ ActiveRecord::Schema.define(version: 20141118033525) do
     t.boolean  "played"
     t.string   "twitter_id"
     t.string   "youtube_url"
+    t.integer  "identity_id"
+    t.string   "video_id"
+    t.string   "vid_title"
   end
+
+  add_index "tweets", ["identity_id"], name: "index_tweets_on_identity_id"
 
   create_table "users", force: true do |t|
     t.string   "email",                  default: "", null: false
