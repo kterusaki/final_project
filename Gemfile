@@ -45,14 +45,14 @@ gem 'faraday'
 gem 'json'
 
 # debugging/testing tools
-group :development do
+#group :development do
 	gem 'pry'
 	gem 'pry-rails'
 	gem 'pry-byebug'
 	gem 'better_errors'
 	gem 'binding_of_caller'
 	gem 'thin'
-end
+#end
 
 
 # Use ActiveModel has_secure_password

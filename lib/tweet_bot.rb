@@ -82,8 +82,9 @@ class TweetBot
 
 	# Adds Tweet to database
 	def insertTweet(userId, text, youtubeUrl, video_id, vid_title, twitter_handle)
+		binding.pry
 		# Since we're finding based on a foreign key, we can assume the search will only return one identity
-		twitter_user = Identity.where(uid: userId).take!
+		twitter_user = Identity.where(uid: userId.to_s).take!
 		newTweet = Tweet.new
 		newTweet.text = text
 		newTweet.youtube_url = youtubeUrl
